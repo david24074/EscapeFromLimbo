@@ -14,11 +14,20 @@ public class EnemyAI : MonoBehaviour
     private GameObject player;
     private Vector3 playerPos;
 
+    [Header("Limb options")]
     public GameObject[] bodyParts;
 
+    [Header("Attack options")]
+    public float damage;
+    public float resetTimer;
+    public GameObject damageInstance;
+    public GameObject Barrel;
+    private bool mayAttack = true;
+
+    [Header("Statistics")]
     public bool hurt;
     public float health = 100;
-    private bool isDead;
+    private bool isDead, walking;
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -34,6 +43,27 @@ public class EnemyAI : MonoBehaviour
             playerPos = player.transform.position;
             agent.SetDestination(playerPos);
         }
+        if(agent.remainingDistance < agent.stoppingDistance)
+        {
+            if(player && mayAttack)
+            {
+                mayAttack = false;
+                Attack();
+            }
+        }
+    }
+
+    private void Attack()
+    {
+        GameObject bullet = Instantiate(damageInstance, Barrel.transform.position, Quaternion.identity);
+        player.GetComponent<Player>().takeDamage(damage);
+        StartCoroutine(resetAttack(resetTimer));
+    }
+
+    private IEnumerator resetAttack(float timer)
+    {
+        yield return new WaitForSeconds(timer);
+        mayAttack = true;
     }
 
     public void takeDamage(float damage, GameObject bullet)
@@ -49,11 +79,14 @@ public class EnemyAI : MonoBehaviour
             {
                 obj.transform.SetParent(null);
                 Rigidbody rb = obj.AddComponent<Rigidbody>();
-                obj.AddComponent<BoxCollider>();
+                if (!obj.GetComponent<Collider>())
+                {
+                    obj.AddComponent<BoxCollider>();
+                }
                 rb.AddForce(transform.position - bullet.transform.position * 35);
                 Destroy(obj, 3);
             }
-            player.GetComponent<Player>().addToScore(50);
+            //player.GetComponent<Player>().addToScore(50);
             Destroy(transform.gameObject);
         }
     }
@@ -63,6 +96,6 @@ public class EnemyAI : MonoBehaviour
         yield return new WaitForSeconds(0.35f);
         hurt = false;
         monitorRenderer.material = whiteMat;
-        player.GetComponent<Player>().addToScore(10);
+        //player.GetComponent<Player>().addToScore(10);
     }
 }

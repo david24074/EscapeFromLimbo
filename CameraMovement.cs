@@ -8,11 +8,21 @@ public class CameraMovement : MonoBehaviour
     public float lerpSpeed;
     private Vector3 destinationPos;
     public Vector3 targetPos;
+    public Transform targetObj;
 
     private void Update()
     {
-        destinationPos = player.transform.position + targetPos;
-        transform.position = Vector3.Lerp(transform.position, destinationPos, lerpSpeed * Time.deltaTime);
+        if (!targetObj)
+        {
+            destinationPos = player.transform.position + targetPos;
+            transform.position = Vector3.Lerp(transform.position, destinationPos, lerpSpeed * Time.deltaTime);
+        }
+        else
+        {
+            destinationPos = targetObj.transform.position;
+            transform.position = Vector3.Lerp(transform.position, destinationPos, lerpSpeed * Time.deltaTime);
+        }
+        transform.LookAt(player.transform);
         //(0, 7, -11);
     }
 }

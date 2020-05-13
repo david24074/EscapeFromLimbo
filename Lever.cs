@@ -8,13 +8,16 @@ public class Lever : MonoBehaviour
 
     [Header("Object options")]
     public GameObject[] objectsToActivate;
+    public GameObject[] objectsToDestroy;
     public Animator anim;
+    public Light objectLight;
 
     [Header("Sound options")]
     public AudioClip soundToPlay;
     public int Amount = 0;
     public int Timer = 0;
     public int timeAdded = 0;
+    public bool useFilter = true;
 
     public void activateLever()
     {
@@ -26,7 +29,12 @@ public class Lever : MonoBehaviour
             {
                 obj.SetActive(true);
             }
-            MusicMGR.playAudioClip(soundToPlay, Amount, Timer, timeAdded);
+            foreach (GameObject obj in objectsToDestroy)
+            {
+                Destroy(obj);
+            }
+
+            MusicMGR.playAudioClip(soundToPlay, Amount, Timer, timeAdded, useFilter);
         }
     }
 }

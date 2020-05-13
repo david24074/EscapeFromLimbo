@@ -13,15 +13,11 @@ public class EnemySpawner : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
-    private void Update()
+    public void spawnEnemies(int amount)
     {
-        transform.position = new Vector3(player.transform.position.x - (maxSize / 2), transform.position.y, transform.position.z);
-        if(EnemyManager.currentEnemies < EnemyManager.totalMaxEnemies)
+        for(int i = 0; i < amount; i++)
         {
-            Instantiate(enemy, new Vector3(Random.Range(transform.position.x, transform.position.x + maxSize),0, Random.Range(transform.position.z, transform.position.z - 60)), Quaternion.identity);
-            EnemyManager.currentEnemies++;
-            EnemyManager.totalMaxEnemies--;
-            Debug.Log(EnemyManager.totalMaxEnemies);
+            Instantiate(enemy, new Vector3(Random.Range(transform.position.x, transform.position.x + maxSize), 0, Random.Range(transform.position.z, transform.position.z - 60)), Quaternion.identity);
         }
     }
 }

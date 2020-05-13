@@ -5,12 +5,17 @@ using TMPro;
 
 public class Player : MonoBehaviour
 {
-    public float rotateSpeed = 10, speed = 10;
+    [Header("Player statistics")]
+    public float health;
+    public float rotateSpeed = 10;
+    public float speed = 10;
     private int layer_mask;
     private Vector3 inputMovement;
-    public float score;
 
+    [Header("Round management")]
+    public float score;
     public TextMeshProUGUI scoreText;
+    private int currentRound = 0;
 
     private void Start()
     {
@@ -39,6 +44,11 @@ public class Player : MonoBehaviour
         scoreText.text = "Score: " + score.ToString();
     }
 
+
+    public void takeDamage(float amount)
+    {
+        health -= amount;
+    }
     private void OnTriggerStay(Collider other)
     {
         if (Input.GetKey(KeyCode.E))
@@ -47,6 +57,14 @@ public class Player : MonoBehaviour
             {
                 other.GetComponent<Lever>().activateLever();
             }
+        }
+    }
+
+    public void startNewRound(bool spawnEnemies, int amountEnemies)
+    {
+        if (spawnEnemies)
+        {
+            GameObject.FindGameObjectWithTag("enemySpawner").GetComponent<EnemySpawner>().spawnEnemies(amountEnemies);
         }
     }
 

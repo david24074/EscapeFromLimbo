@@ -6,6 +6,7 @@ public class MusicMGR : MonoBehaviour
 {
     private static AudioSource source;
     private static MusicMGR instance;
+    private static AudioSource filterObject;
 
     [Header("Ambiance tracks")]
     public AudioClip[] ambiance;
@@ -15,6 +16,7 @@ public class MusicMGR : MonoBehaviour
         instance = this;
         source = GetComponent<AudioSource>();
         StartCoroutine(startNewAmbiance(0));
+        filterObject = GameObject.FindGameObjectWithTag("filterObject").GetComponent<AudioSource>();
     }
 
     private IEnumerator startNewAmbiance(float Timer)
@@ -25,25 +27,51 @@ public class MusicMGR : MonoBehaviour
         StartCoroutine(startNewAmbiance(clip.length));
     }
 
-    public static void playAudioClip(AudioClip clip, int Amount, int Timer, int timeAdded)
+    public static void playAudioClip(AudioClip clip, int Amount, int Timer, int timeAdded, bool UseFilter)
     {
-        if(Amount == 0)
+        if (UseFilter)
+        {
+            if (Amount == 0)
+            {
+                filterObject.PlayOneShot(clip);
+            }
+            else
+            {
+                for (int i = 0; i < Amount; i++)
+                {
+                    instance.StartCoroutine(playAudioClips(clip, Timer, UseFilter));
+                    Timer += timeAdded;
+                }
+            }
+        }
+        else
+        {
+            if (Amount == 0)
+            {
+                source.PlayOneShot(clip);
+            }
+            else
+            {
+                for (int i = 0; i < Amount; i++)
+                {
+                    instance.StartCoroutine(playAudioClips(clip, Timer, UseFilter));
+                    Timer += timeAdded;
+                }
+            }
+        }
+
+    }
+
+    public static IEnumerator playAudioClips(AudioClip clip, int time, bool useFilter)
+    {
+        yield return new WaitForSeconds(time);
+        if (useFilter)
         {
             source.PlayOneShot(clip);
         }
         else
         {
-            for(int i = 0; i < Amount; i++)
-            {
-                instance.StartCoroutine(playAudioClips(clip, Timer));
-                Timer += timeAdded;
-            }
+            filterObject.PlayOneShot(clip);
         }
-    }
-
-    public static IEnumerator playAudioClips(AudioClip clip, int timer)
-    {
-        yield return new WaitForSeconds(timer);
-        source.PlayOneShot(clip);
     }
 }
