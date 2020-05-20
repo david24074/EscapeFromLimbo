@@ -16,5 +16,11 @@ public class Bullet : MonoBehaviour
                 Destroy(transform.gameObject);
             }
         }
+        else
+        {
+            if(other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            Destroy(transform.gameObject);
+        }
+        
     }
 }

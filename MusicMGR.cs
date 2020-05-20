@@ -5,17 +5,38 @@ using UnityEngine;
 public class MusicMGR : MonoBehaviour
 {
     private static AudioSource source;
-    private static MusicMGR instance;
+    private static MusicMGR musicInstance;
     private static AudioSource filterObject;
 
     [Header("Ambiance tracks")]
     public AudioClip[] ambiance;
 
+    public static GameObject instance;
+
     private void Start()
     {
-        instance = this;
+        musicInstance = this;
+        DontDestroyOnLoad(transform.gameObject);
+        if (instance == null)
+        {
+            instance = transform.gameObject;
+        }
+        else
+        {
+            Destroy(transform.gameObject);
+        }
+
+    }
+
+    private void Awake()
+    {
         source = GetComponent<AudioSource>();
         StartCoroutine(startNewAmbiance(0));
+    }
+
+    public static void findFilter()
+    {
+        if (GameObject.FindGameObjectWithTag("filterObject"))
         filterObject = GameObject.FindGameObjectWithTag("filterObject").GetComponent<AudioSource>();
     }
 
@@ -39,7 +60,7 @@ public class MusicMGR : MonoBehaviour
             {
                 for (int i = 0; i < Amount; i++)
                 {
-                    instance.StartCoroutine(playAudioClips(clip, Timer, UseFilter));
+                    musicInstance.StartCoroutine(playAudioClips(clip, Timer, UseFilter));
                     Timer += timeAdded;
                 }
             }
@@ -54,7 +75,7 @@ public class MusicMGR : MonoBehaviour
             {
                 for (int i = 0; i < Amount; i++)
                 {
-                    instance.StartCoroutine(playAudioClips(clip, Timer, UseFilter));
+                    musicInstance.StartCoroutine(playAudioClips(clip, Timer, UseFilter));
                     Timer += timeAdded;
                 }
             }

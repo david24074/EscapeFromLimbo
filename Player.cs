@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        MusicMGR.findFilter();
         layer_mask = LayerMask.GetMask("Ground", "Enemy");
     }
 
@@ -44,11 +45,11 @@ public class Player : MonoBehaviour
         scoreText.text = "Score: " + score.ToString();
     }
 
-
     public void takeDamage(float amount)
     {
         health -= amount;
     }
+
     private void OnTriggerStay(Collider other)
     {
         if (Input.GetKey(KeyCode.E))
@@ -57,14 +58,6 @@ public class Player : MonoBehaviour
             {
                 other.GetComponent<Lever>().activateLever();
             }
-        }
-    }
-
-    public void startNewRound(bool spawnEnemies, int amountEnemies)
-    {
-        if (spawnEnemies)
-        {
-            GameObject.FindGameObjectWithTag("enemySpawner").GetComponent<EnemySpawner>().spawnEnemies(amountEnemies);
         }
     }
 

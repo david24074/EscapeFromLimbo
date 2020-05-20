@@ -25,4 +25,20 @@ public class CameraMovement : MonoBehaviour
         transform.LookAt(player.transform);
         //(0, 7, -11);
     }
+
+    public void setNewCameraPos(Transform newPos)
+    {
+        if (newPos)
+        {
+            newPos.gameObject.SetActive(true);
+            if (targetObj)
+                targetObj.gameObject.SetActive(false);
+            if (newPos)
+                targetObj = newPos;
+        }
+        else
+        {
+            targetObj = null;
+        }
+    }
 }

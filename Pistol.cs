@@ -7,6 +7,7 @@ public class Pistol : MonoBehaviour
     [Header("Pistol objects")]
     public GameObject barrel;
     public GameObject bullet;
+    public AudioClip fireSound;
 
     [Header("Gun statistics")]
     public float fireRate = 0.5f;
@@ -31,6 +32,8 @@ public class Pistol : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
+                if (fireSound)
+                    MusicMGR.playAudioClip(fireSound, 0, 0,0, false);
                 fireRate = fireRateSave;
                 currentAmmo -= 1;
                 GameObject newBullet = Instantiate(bullet, barrel.transform.position, barrel.transform.rotation);

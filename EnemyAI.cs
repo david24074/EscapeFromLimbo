@@ -47,8 +47,11 @@ public class EnemyAI : MonoBehaviour
         {
             if(player && mayAttack)
             {
-                mayAttack = false;
-                Attack();
+                if(Vector3.Distance(transform.position, player.transform.position) < agent.stoppingDistance)
+                {
+                    mayAttack = false;
+                    Attack();
+                }
             }
         }
     }
