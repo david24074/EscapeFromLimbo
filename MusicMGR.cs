@@ -25,7 +25,6 @@ public class MusicMGR : MonoBehaviour
         {
             Destroy(transform.gameObject);
         }
-
     }
 
     private void Awake()
@@ -38,6 +37,7 @@ public class MusicMGR : MonoBehaviour
     {
         if (GameObject.FindGameObjectWithTag("filterObject"))
         filterObject = GameObject.FindGameObjectWithTag("filterObject").GetComponent<AudioSource>();
+        source = GameObject.FindGameObjectWithTag("MusicMGR").GetComponent<AudioSource>();
     }
 
     private IEnumerator startNewAmbiance(float Timer)
@@ -50,6 +50,9 @@ public class MusicMGR : MonoBehaviour
 
     public static void playAudioClip(AudioClip clip, int Amount, int Timer, int timeAdded, bool UseFilter)
     {
+        if (!source)
+            findFilter();
+
         if (UseFilter)
         {
             if (Amount == 0)

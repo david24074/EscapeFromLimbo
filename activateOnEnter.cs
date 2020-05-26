@@ -4,21 +4,35 @@ using UnityEngine;
 
 public class activateOnEnter : MonoBehaviour
 {
+    [Header("Activate objects")]
+    public bool activateObjects;
     public GameObject[] objectsToActivate;
+
+    [Header("Deactivate objects")]
+    public GameObject deactivateObjects;
     public GameObject[] objectsToDeactivate;
+
+    [Header("Load scene options")]
+    public bool loadScene;
+    public int sceneIndex;
+
+    [Header("Camera options")]
     public Transform newCameraPos;
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player")
         {
-            for (int i = 0; i < objectsToActivate.Length; i++)
+            if (activateObjects)
             {
-                objectsToActivate[i].SetActive(true);
-            }
-            for (int i = 0; i < objectsToDeactivate.Length; i++)
-            {
-                objectsToDeactivate[i].SetActive(false);
+                for (int i = 0; i < objectsToActivate.Length; i++)
+                {
+                    objectsToActivate[i].SetActive(true);
+                }
+                for (int i = 0; i < objectsToDeactivate.Length; i++)
+                {
+                    objectsToDeactivate[i].SetActive(false);
+                }
             }
 
             if (newCameraPos)
@@ -28,6 +42,12 @@ public class activateOnEnter : MonoBehaviour
             else
             {
                 Camera.main.GetComponent<CameraMovement>().setNewCameraPos(null);
+            }
+
+
+            if (loadScene)
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
             }
         }
     }
