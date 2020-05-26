@@ -15,6 +15,7 @@ public class Pistol : MonoBehaviour
     public float reloadTime = 1;
     public float damage = 12;
     public float bulletFireSpeed = 10;
+    public bool isAutomatic;
 
     private float fireRateSave, currentAmmo;
     private bool reloading;
@@ -30,17 +31,21 @@ public class Pistol : MonoBehaviour
         fireRate -= 1 * Time.deltaTime;
         if(fireRate <= 0 && currentAmmo > 0 && !reloading)
         {
-            if (Input.GetMouseButton(0))
+            if (isAutomatic)
             {
-                if (fireSound)
-                    MusicMGR.playAudioClip(fireSound, 0, 0,0, false);
-                fireRate = fireRateSave;
-                currentAmmo -= 1;
-                GameObject newBullet = Instantiate(bullet, barrel.transform.position, barrel.transform.rotation);
-                newBullet.GetComponent<Rigidbody>().AddForce(newBullet.transform.forward * bulletFireSpeed);
-                newBullet.GetComponent<Bullet>().Damage = damage;
-                Destroy(newBullet, 3);
+                if (Input.GetMouseButton(0))
+                {
+                    FireBullet();
+                }
             }
+            else
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    FireBullet();
+                }
+            }
+         
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -51,6 +56,18 @@ public class Pistol : MonoBehaviour
                 StartCoroutine(reload());
             }
         }
+    }
+
+    private void FireBullet()
+    {
+        if (fireSound)
+            MusicMGR.playAudioClip(fireSound, 0, 0, 0, false);
+        fireRate = fireRateSave;
+        currentAmmo -= 1;
+        GameObject newBullet = Instantiate(bullet, barrel.transform.position, barrel.transform.rotation);
+        newBullet.GetComponent<Rigidbody>().AddForce(newBullet.transform.forward * bulletFireSpeed);
+        newBullet.GetComponent<Bullet>().Damage = damage;
+        Destroy(newBullet, 3);
     }
 
     private IEnumerator reload()
