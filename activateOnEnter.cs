@@ -4,26 +4,33 @@ using UnityEngine;
 
 public class activateOnEnter : MonoBehaviour
 {
+    [Header("Activation requirements")]
+    public bool requireNoActiveEnemies;
+
     [Header("Activate objects")]
-    public bool activateObjects;
-    public GameObject[] objectsToActivate;
+    [SerializeField] private bool activateObjects;
+    [SerializeField] private GameObject[] objectsToActivate;
 
     [Header("Deactivate objects")]
-    public GameObject deactivateObjects;
-    public GameObject[] objectsToDeactivate;
+    [SerializeField] private GameObject deactivateObjects;
+    [SerializeField] private GameObject[] objectsToDeactivate;
 
     [Header("Load scene options")]
-    public bool loadScene;
-    public int sceneIndex;
+    [SerializeField] private bool loadScene;
+    [SerializeField] private int sceneIndex;
 
     [Header("Camera options")]
-    public Transform newCameraPos;
+    [SerializeField] private Transform newCameraPos;
+
+    [Header("Player Options")]
+    [SerializeField] private bool activatePlayerScript;
+    [SerializeField] private bool deactivatePlayerScript;
 
     [Header("Spawn enemy options")]
-    public int amountEnemies;
-    public GameObject[] commonEnemy;
-    public GameObject[] rareEnemy;
-    public GameObject[] RarestEnemy;
+    [SerializeField] private int amountEnemies;
+    [SerializeField] private GameObject[] commonEnemy;
+    [SerializeField] private GameObject[] rareEnemy;
+    [SerializeField] private GameObject[] RarestEnemy;
     private EnemySpawner enemySpawner;
 
     private void Awake()
@@ -32,10 +39,14 @@ public class activateOnEnter : MonoBehaviour
             enemySpawner = GameObject.FindGameObjectWithTag("enemySpawner").GetComponent<EnemySpawner>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if(other.tag == "Player")
         {
+            if(requireNoActiveEnemies)
+                if (GameObject.FindGameObjectWithTag("Enemy"))
+                     return;
+
             if (activateObjects)
             {
                 for (int i = 0; i < objectsToActivate.Length; i++)
@@ -46,6 +57,16 @@ public class activateOnEnter : MonoBehaviour
                 {
                     objectsToDeactivate[i].SetActive(false);
                 }
+            }
+
+            if (deactivatePlayerScript)
+            {
+                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().enabled = false;
+            }
+
+            if (activatePlayerScript)
+            {
+                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().enabled = true;
             }
 
             if (newCameraPos)
@@ -69,6 +90,8 @@ public class activateOnEnter : MonoBehaviour
                     spawnEnemy();
                 }
             }
+
+            Destroy(transform.gameObject);
         }
     }
 

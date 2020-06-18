@@ -5,17 +5,20 @@ using UnityEngine;
 public class Pistol : MonoBehaviour
 {
     [Header("Pistol objects")]
-    public GameObject barrel;
-    public GameObject bullet;
-    public AudioClip fireSound;
+    [SerializeField] private GameObject barrel;
+    [SerializeField] private GameObject bullet;
+    public GameObject gunDrop;
+    [SerializeField] private AudioClip fireSound;
+    [SerializeField] private AudioClip noAmmoSound;
 
     [Header("Gun statistics")]
-    public float fireRate = 0.5f;
-    public float ammoPerClip = 12;
-    public float reloadTime = 1;
-    public float damage = 12;
-    public float bulletFireSpeed = 10;
-    public bool isAutomatic;
+    [SerializeField] private float fireRate = 0.5f;
+    [SerializeField] private float ammoPerClip = 12;
+    [SerializeField] private float reloadTime = 1;
+    [SerializeField] private float damage = 12;
+    [SerializeField] private float bulletFireSpeed = 10;
+    [SerializeField] private bool isAutomatic;
+    [SerializeField] private bool destroyBulletOnHit;
 
     private float fireRateSave, currentAmmo;
     private bool reloading;
@@ -58,6 +61,11 @@ public class Pistol : MonoBehaviour
         }
     }
 
+    public bool checkIfReloading()
+    {
+        return reloading;
+    }
+
     private void FireBullet()
     {
         if (fireSound)
@@ -66,7 +74,7 @@ public class Pistol : MonoBehaviour
         currentAmmo -= 1;
         GameObject newBullet = Instantiate(bullet, barrel.transform.position, barrel.transform.rotation);
         newBullet.GetComponent<Rigidbody>().AddForce(newBullet.transform.forward * bulletFireSpeed);
-        newBullet.GetComponent<Bullet>().Damage = damage;
+        newBullet.GetComponent<Bullet>().setStats(damage, destroyBulletOnHit);
         Destroy(newBullet, 3);
     }
 

@@ -9,9 +9,9 @@ public class MusicMGR : MonoBehaviour
     private static AudioSource filterObject;
 
     [Header("Ambiance tracks")]
-    public AudioClip[] ambiance;
+    [SerializeField] private AudioClip[] ambiance;
 
-    public static GameObject instance;
+    [SerializeField] private static GameObject instance;
 
     private void Start()
     {

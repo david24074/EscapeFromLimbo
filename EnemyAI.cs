@@ -86,7 +86,10 @@ public class EnemyAI : MonoBehaviour
                 {
                     obj.AddComponent<BoxCollider>();
                 }
-                rb.AddForce(transform.position - bullet.transform.position * 35);
+                float directionX = Random.Range(-8f, 8f);
+                float directionY = Random.Range(-4f, 4f);
+
+                rb.AddForce(new Vector3(directionX, directionY).normalized *35);
                 Destroy(obj, 3);
             }
             //player.GetComponent<Player>().addToScore(50);

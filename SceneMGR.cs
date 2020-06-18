@@ -26,6 +26,11 @@ public class SceneMGR : MonoBehaviour
         }
     }
 
+    public static void resetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
     public void QuitGame()
     {
         Application.Quit();

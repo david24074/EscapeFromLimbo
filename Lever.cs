@@ -7,33 +7,25 @@ public class Lever : MonoBehaviour
     private bool activated;
 
     [Header("Object options")]
-    public GameObject[] objectsToActivate;
-    public GameObject[] objectsToDestroy;
-    public Animator anim;
-    public Light objectLight;
+    [SerializeField] private GameObject[] objectsToActivate;
+    [SerializeField] private GameObject[] objectsToDestroy;
+    [SerializeField] private Animator anim;
+    [SerializeField] private Light objectLight;
 
     [Header("Sound options")]
-    public AudioClip soundToPlay;
-    public int Amount = 0;
-    public int Timer = 0;
-    public int timeAdded = 0;
-    public bool useFilter = true;
+    [SerializeField] private AudioClip soundToPlay;
+    [SerializeField] private int Amount = 0;
+    [SerializeField] private int Timer = 0;
+    [SerializeField] private int timeAdded = 0;
+    [SerializeField] private bool useFilter = true;
 
     [Header("Enemy Options")]
-    public bool spawnEnemies;
-    public int amountEnemies;
-    public GameObject[] commonEnemy;
-    public GameObject[] rareEnemy;
-    public GameObject[] RarestEnemy;
+    [SerializeField] private bool spawnEnemies;
+    [SerializeField] private int amountEnemies;
+    [SerializeField] private GameObject[] commonEnemy;
+    [SerializeField] private GameObject[] rareEnemy;
+    [SerializeField] private GameObject[] RarestEnemy;
     private EnemySpawner enemySpawner;
-
-    private void Start()
-    {
-        if (spawnEnemies)
-        {
-            enemySpawner = GameObject.FindGameObjectWithTag("enemySpawner").GetComponent<EnemySpawner>();
-        }
-    }
 
     public void activateLever()
     {
@@ -54,6 +46,7 @@ public class Lever : MonoBehaviour
 
             if (spawnEnemies)
             {
+                enemySpawner = GameObject.FindGameObjectWithTag("enemySpawner").GetComponent<EnemySpawner>();
                 for (int i = 0; i < amountEnemies; i++)
                 {
                     spawnEnemy();

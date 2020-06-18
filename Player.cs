@@ -6,21 +6,42 @@ using TMPro;
 public class Player : MonoBehaviour
 {
     [Header("Player statistics")]
-    public float health;
-    public float rotateSpeed = 10;
-    public float speed = 10;
+    [SerializeField] private float health;
+    [SerializeField] private float rotateSpeed = 10;
+    [SerializeField] private float speed = 10;
+    [SerializeField] private float jumpForce = 10;
+    [SerializeField] private Material hurtMaterial;
+    private Material idleMaterial;
+    private MeshRenderer renderer;
     private int layer_mask;
     private Vector3 inputMovement;
+    private bool isDead, inSafeArea;
+    private Rigidbody rb;
 
-    [Header("Round management")]
-    public float score;
-    public TextMeshProUGUI scoreText;
-    private int currentRound = 0;
+    [Header("Weapons")]
+    [SerializeField] private GameObject pistol;
+    [SerializeField] private GameObject sniperRifle;
+    [SerializeField] private GameObject assaultRifle;
+    [SerializeField] private GameObject rocketLauncher;
+    [SerializeField] private GameObject miniGun;
+    private GameObject activeWeapon;
 
     private void Start()
     {
+        renderer = GetComponent<MeshRenderer>();
+        idleMaterial = renderer.material;
         MusicMGR.findFilter();
+        rb = GetComponent<Rigidbody>();
         layer_mask = LayerMask.GetMask("Ground", "Enemy");
+        if (ES3.KeyExists("weaponIndex"))
+        {
+            int index = ES3.Load<int>("weaponIndex");
+            setWeapon(index, null);
+        }
+        else
+        {
+            activeWeapon = pistol;
+        }
     }
 
     private void Update()
@@ -37,27 +58,153 @@ public class Player : MonoBehaviour
 
         inputMovement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         transform.Translate(inputMovement * Time.deltaTime * speed, Space.World);
+
+        if (!inSafeArea)
+            takeDamage(0.1f);
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log(checkIfGrounded());
+            if (checkIfGrounded())
+            {
+                Debug.Log("Jumped");
+                rb.AddForce(Vector3.up * jumpForce);
+            }
+        }
+                
     }
 
-    public void addToScore(int scoreToAdd)
+    public bool checkIfReloadingGun()
     {
-        score += scoreToAdd;
-        scoreText.text = "Score: " + score.ToString();
+        return activeWeapon.GetComponent<Pistol>().checkIfReloading();
+    }
+
+    private bool checkIfGrounded()
+    {
+        float DisstanceToTheGround = GetComponent<Collider>().bounds.extents.y;
+        return Physics.Raycast(transform.position, Vector3.down, 0.5f, LayerMask.NameToLayer("Ground"));
     }
 
     public void takeDamage(float amount)
     {
         health -= amount;
+
+        if(health <= 0 && !isDead)
+        {
+            die();
+        }
+        else
+        {
+            renderer.material = hurtMaterial;
+            StartCoroutine(backToIdleMaterial());
+        }
+    }
+
+    private IEnumerator backToIdleMaterial()
+    {
+        yield return new WaitForSeconds(0.25f);
+        renderer.material = idleMaterial;
+    }
+
+    private void die()
+    {
+        isDead = true;
+        ES3.DeleteFile();
+        SceneMGR.resetScene();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        inSafeArea = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        inSafeArea = false;
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (Input.GetKey(KeyCode.E))
+        inSafeArea = false;
+
+        if (other.tag == "Death" && !isDead)
+            die();
+
+        if (other.tag == "Lever")
         {
-            if (other.tag == "Lever")
+            if (Input.GetKey(KeyCode.E))
             {
                 other.GetComponent<Lever>().activateLever();
             }
+            inSafeArea = true;
+            return;
+        }
+
+        if (other.tag == "Trap")
+        {
+            if (!isDead)
+                transform.position = other.transform.GetComponent<resetToWaypoint>().getWaypoint().position;
+            inSafeArea = true;
+            return;
+        }
+
+        if (other.tag == "Pickup")
+            inSafeArea = true;
+
+        if (other.tag == "Enemy")
+            inSafeArea = true;
+
+        if (other.tag == "LightArea")
+            inSafeArea = true;
+        
+    }
+
+    public void setWeapon(int weaponIndex, GameObject pickup)
+    {
+        if(activeWeapon)
+            Instantiate(activeWeapon.GetComponent<Pistol>().gunDrop, transform.position, Quaternion.identity);
+        pistol.SetActive(false);
+        assaultRifle.SetActive(false);
+        sniperRifle.SetActive(false);
+        rocketLauncher.SetActive(false);
+        miniGun.SetActive(false);
+        switch (weaponIndex)
+        {
+            case 1:
+                pistol.SetActive(true);
+                activeWeapon = pistol;
+                ES3.Save<int>("weaponIndex", 1);
+                if (pickup)
+                    Destroy(pickup);
+                break;
+            case 2:
+                assaultRifle.SetActive(true);
+                activeWeapon = assaultRifle;
+                ES3.Save<int>("weaponIndex", 2);
+                if (pickup)
+                    Destroy(pickup);
+                break;
+            case 3:
+                sniperRifle.SetActive(true);
+                activeWeapon = sniperRifle;
+                ES3.Save<int>("weaponIndex", 3);
+                if (pickup)
+                    Destroy(pickup);
+                break;
+            case 4:
+                rocketLauncher.SetActive(true);
+                activeWeapon = rocketLauncher;
+                ES3.Save<int>("weaponIndex", 4);
+                if (pickup)
+                    Destroy(pickup);
+                break;
+            case 5:
+                miniGun.SetActive(true);
+                activeWeapon = miniGun;
+                ES3.Save<int>("weaponIndex", 5);
+                if (pickup)
+                    Destroy(pickup);
+                break;
         }
     }
 

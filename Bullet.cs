@@ -23,4 +23,10 @@ public class Bullet : MonoBehaviour
         }
         
     }
+
+    public void setStats(float dam, bool destroyOnHit)
+    {
+        Damage = dam;
+        destroyOnImpact = destroyOnHit;
+    }
 }

@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class DisplayDialogue : MonoBehaviour
 {
-    public static TextMeshProUGUI dialogueText;
-    public static Image dialogueBox;
+    [SerializeField] private static TextMeshProUGUI dialogueText;
+    [SerializeField] private static Image dialogueBox;
     private static DisplayDialogue dialogue;
 
     private void Awake()
