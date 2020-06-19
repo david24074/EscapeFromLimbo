@@ -31,26 +31,31 @@ public class EnemyAI : MonoBehaviour
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        agent = GetComponent<NavMeshAgent>();
+        if(GetComponent<NavMeshAgent>())
+            agent = GetComponent<NavMeshAgent>();
         playerPos = player.transform.position;
-        agent.SetDestination(playerPos);
+        if(agent)
+            agent.SetDestination(playerPos);
     }
 
     private void Update()
     {
-        if(playerPos != player.transform.position)
+        if (agent)
         {
-            playerPos = player.transform.position;
-            agent.SetDestination(playerPos);
-        }
-        if(agent.remainingDistance < agent.stoppingDistance)
-        {
-            if(player && mayAttack)
+            if (playerPos != player.transform.position)
             {
-                if(Vector3.Distance(transform.position, player.transform.position) < agent.stoppingDistance)
+                playerPos = player.transform.position;
+                agent.SetDestination(playerPos);
+            }
+            if (agent.remainingDistance < agent.stoppingDistance)
+            {
+                if (player && mayAttack)
                 {
-                    mayAttack = false;
-                    Attack();
+                    if (Vector3.Distance(transform.position, player.transform.position) < agent.stoppingDistance)
+                    {
+                        mayAttack = false;
+                        Attack();
+                    }
                 }
             }
         }

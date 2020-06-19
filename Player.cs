@@ -64,14 +64,17 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log(checkIfGrounded());
-            if (checkIfGrounded())
-            {
-                Debug.Log("Jumped");
-                rb.AddForce(Vector3.up * jumpForce);
-            }
+            jump();
         }
                 
+    }
+
+    public void jump()
+    {
+        if (checkIfGrounded())
+        {
+            rb.AddForce(Vector3.up * jumpForce);
+        }
     }
 
     public bool checkIfReloadingGun()
@@ -82,7 +85,7 @@ public class Player : MonoBehaviour
     private bool checkIfGrounded()
     {
         float DisstanceToTheGround = GetComponent<Collider>().bounds.extents.y;
-        return Physics.Raycast(transform.position, Vector3.down, 0.5f, LayerMask.NameToLayer("Ground"));
+        return (Physics.Raycast(transform.position, -transform.up, DisstanceToTheGround + 0.1f));
     }
 
     public void takeDamage(float amount)

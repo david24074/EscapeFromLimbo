@@ -12,7 +12,7 @@ public class CallDialogueOnCollision : MonoBehaviour
         if(other.tag == "Player")
         {
             DisplayDialogue.activateText(textToDisplay, fadeTimer);
-            Destroy(transform.gameObject);
+            Destroy(this);
         }
     }
 }
