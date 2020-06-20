@@ -27,13 +27,13 @@ public class SettingsMenu : MonoBehaviour
         }
     }
 
-    public void setVolume (float volume)
+    public void SetVolume (float volume)
     {
         mixer.SetFloat("volume", volume);
         ES3.Save<float>("audioVolume", volume);
     }
 
-    public void setFullscreen (bool isFullscreen)
+    public void SetFullscreen (bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
         ES3.Save<bool>("isFullscreen", isFullscreen);

@@ -204,7 +204,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 2.6833334
-    functionName: explodeGround
+    functionName: ExplodeGround
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

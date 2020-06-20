@@ -11,7 +11,7 @@ public class GunPickup : MonoBehaviour
 
     private void Awake()
     {
-        StartCoroutine(setActive());
+        StartCoroutine(SetActive());
     }
 
     private void Update()
@@ -26,7 +26,7 @@ public class GunPickup : MonoBehaviour
             lightNotification.intensity = 5;
             if (Input.GetKey(KeyCode.E))
             {
-                setPlayerWeapon();
+                SetPlayerWeapon();
             }
         }
     }
@@ -39,9 +39,9 @@ public class GunPickup : MonoBehaviour
         }
     }
 
-    private void setPlayerWeapon()
+    private void SetPlayerWeapon()
     {
-        if (!GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().checkIfReloadingGun())
+        if (!GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CheckIfReloadingGun())
         {
             if (type == gunType.pistol)
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().setWeapon(1, transform.gameObject);
@@ -56,7 +56,7 @@ public class GunPickup : MonoBehaviour
         }
     }
 
-    private IEnumerator setActive()
+    private IEnumerator SetActive()
     {
         yield return new WaitForSeconds(2.5f);
         interactable = true;

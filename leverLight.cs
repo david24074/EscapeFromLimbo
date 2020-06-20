@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class leverLight : MonoBehaviour
+public class LeverLight : MonoBehaviour
 {
-    public void activateLight()
+    public void ActivateLight()
     {
         GetComponent<Light>().color = Color.green;
     }

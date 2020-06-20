@@ -1,17 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CallDialogueOnCollision : MonoBehaviour
 {
-    public string textToDisplay;
-    public float fadeTimer;
+    [SerializeField] private string textToDisplay;
+    [SerializeField] private float fadeTimer;
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player")
         {
-            DisplayDialogue.activateText(textToDisplay, fadeTimer);
+            DisplayDialogue.ActivateText(textToDisplay, fadeTimer);
             Destroy(this);
         }
     }

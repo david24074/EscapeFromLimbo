@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MusicMGR : MonoBehaviour
@@ -30,28 +29,28 @@ public class MusicMGR : MonoBehaviour
     private void Awake()
     {
         source = GetComponent<AudioSource>();
-        StartCoroutine(startNewAmbiance(0));
+        StartCoroutine(StartNewAmbiance(0));
     }
 
-    public static void findFilter()
+    public static void FindFilter()
     {
         if (GameObject.FindGameObjectWithTag("filterObject"))
         filterObject = GameObject.FindGameObjectWithTag("filterObject").GetComponent<AudioSource>();
         source = GameObject.FindGameObjectWithTag("MusicMGR").GetComponent<AudioSource>();
     }
 
-    private IEnumerator startNewAmbiance(float Timer)
+    private IEnumerator StartNewAmbiance(float Timer)
     {
         yield return new WaitForSeconds(Timer);
         AudioClip clip = ambiance[Random.Range(0, ambiance.Length)];
         source.PlayOneShot(clip);
-        StartCoroutine(startNewAmbiance(clip.length));
+        StartCoroutine(StartNewAmbiance(clip.length));
     }
 
-    public static void playAudioClip(AudioClip clip, int Amount, int Timer, int timeAdded, bool UseFilter)
+    public static void PlayAudioClip(AudioClip clip, int Amount, int Timer, int timeAdded, bool UseFilter)
     {
         if (!source)
-            findFilter();
+            FindFilter();
 
         if (UseFilter)
         {
@@ -63,7 +62,7 @@ public class MusicMGR : MonoBehaviour
             {
                 for (int i = 0; i < Amount; i++)
                 {
-                    musicInstance.StartCoroutine(playAudioClips(clip, Timer, UseFilter));
+                    musicInstance.StartCoroutine(PlayAudioClips(clip, Timer, UseFilter));
                     Timer += timeAdded;
                 }
             }
@@ -78,7 +77,7 @@ public class MusicMGR : MonoBehaviour
             {
                 for (int i = 0; i < Amount; i++)
                 {
-                    musicInstance.StartCoroutine(playAudioClips(clip, Timer, UseFilter));
+                    musicInstance.StartCoroutine(PlayAudioClips(clip, Timer, UseFilter));
                     Timer += timeAdded;
                 }
             }
@@ -86,7 +85,7 @@ public class MusicMGR : MonoBehaviour
 
     }
 
-    public static IEnumerator playAudioClips(AudioClip clip, int time, bool useFilter)
+    public static IEnumerator PlayAudioClips(AudioClip clip, int time, bool useFilter)
     {
         yield return new WaitForSeconds(time);
         if (useFilter)

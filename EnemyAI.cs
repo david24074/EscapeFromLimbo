@@ -6,27 +6,27 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     [Header("Material")]
-    public MeshRenderer monitorRenderer;
-    public Material whiteMat;
-    public Material redmat;
+    [SerializeField] private MeshRenderer monitorRenderer;
+    [SerializeField] private Material whiteMat;
+    [SerializeField] private Material redmat;
 
     private NavMeshAgent agent;
     private GameObject player;
     private Vector3 playerPos;
 
     [Header("Limb options")]
-    public GameObject[] bodyParts;
+    [SerializeField] private GameObject[] bodyParts;
 
     [Header("Attack options")]
-    public float damage;
-    public float resetTimer;
-    public GameObject damageInstance;
-    public GameObject Barrel;
+    [SerializeField] private float damage;
+    [SerializeField] private float resetTimer;
+    [SerializeField] private GameObject damageInstance;
+    [SerializeField] private GameObject Barrel;
     private bool mayAttack = true;
 
     [Header("Statistics")]
-    public bool hurt;
-    public float health = 100;
+    [SerializeField] private bool hurt;
+    [SerializeField] private float health = 100;
     private bool isDead, walking;
     private void Start()
     {
@@ -36,6 +36,11 @@ public class EnemyAI : MonoBehaviour
         playerPos = player.transform.position;
         if(agent)
             agent.SetDestination(playerPos);
+    }
+
+    public float GetHealth()
+    {
+        return health;
     }
 
     private void Update()
@@ -64,21 +69,21 @@ public class EnemyAI : MonoBehaviour
     private void Attack()
     {
         GameObject bullet = Instantiate(damageInstance, Barrel.transform.position, Quaternion.identity);
-        player.GetComponent<Player>().takeDamage(damage);
-        StartCoroutine(resetAttack(resetTimer));
+        player.GetComponent<Player>().TakeDamage(damage);
+        StartCoroutine(ResetAttack(resetTimer));
     }
 
-    private IEnumerator resetAttack(float timer)
+    private IEnumerator ResetAttack(float timer)
     {
         yield return new WaitForSeconds(timer);
         mayAttack = true;
     }
 
-    public void takeDamage(float damage, GameObject bullet)
+    public void TakeDamage(float damage, GameObject bullet)
     {
         hurt = true;
         monitorRenderer.material = redmat;
-        StartCoroutine(resetMonitor());
+        StartCoroutine(ResetMonitor());
         health -= damage;
         if (health <= 0 && !isDead)
         {
@@ -102,7 +107,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    public IEnumerator resetMonitor()
+    public IEnumerator ResetMonitor()
     {
         yield return new WaitForSeconds(0.35f);
         hurt = false;

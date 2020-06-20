@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class activateOnEnter : MonoBehaviour
+public class ActivateOnEnter : MonoBehaviour
 {
     [Header("Activation requirements")]
-    public bool requireNoActiveEnemies;
+    [SerializeField] private bool requireNoActiveEnemies;
 
     [Header("Activate objects")]
     [SerializeField] private bool activateObjects;
@@ -71,11 +71,11 @@ public class activateOnEnter : MonoBehaviour
 
             if (newCameraPos)
             {
-                Camera.main.GetComponent<CameraMovement>().setNewCameraPos(newCameraPos);
+                Camera.main.GetComponent<CameraMovement>().SetNewCameraPos(newCameraPos);
             }
             else
             {
-                Camera.main.GetComponent<CameraMovement>().setNewCameraPos(null);
+                Camera.main.GetComponent<CameraMovement>().SetNewCameraPos(null);
             }
 
             if (loadScene)
@@ -87,7 +87,7 @@ public class activateOnEnter : MonoBehaviour
             {
                 for (int i = 0; i < amountEnemies; i++)
                 {
-                    spawnEnemy();
+                    SpawnEnemy();
                 }
             }
 
@@ -95,22 +95,22 @@ public class activateOnEnter : MonoBehaviour
         }
     }
 
-    private void spawnEnemy()
+    private void SpawnEnemy()
     {
         int randomChance = Random.Range(0, 100);
         if (randomChance <= 50 && randomChance > 0)
         {
-            enemySpawner.spawnSingleEnemy(commonEnemy[Random.Range(0, commonEnemy.Length)]);
+            enemySpawner.SpawnSingleEnemy(commonEnemy[Random.Range(0, commonEnemy.Length)]);
             return;
         }
         if (randomChance <= 85 && randomChance > 50)
         {
-            enemySpawner.spawnSingleEnemy(rareEnemy[Random.Range(0, rareEnemy.Length)]);
+            enemySpawner.SpawnSingleEnemy(rareEnemy[Random.Range(0, rareEnemy.Length)]);
             return;
         }
         if (randomChance <= 100 && randomChance > 85)
         {
-            enemySpawner.spawnSingleEnemy(RarestEnemy[Random.Range(0, RarestEnemy.Length)]);
+            enemySpawner.SpawnSingleEnemy(RarestEnemy[Random.Range(0, RarestEnemy.Length)]);
             return;
         }
     }

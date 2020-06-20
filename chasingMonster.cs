@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class chasingMonster : MonoBehaviour
+public class ChasingMonster : MonoBehaviour
 {
-    public float movementSpeed = 0.1f;
+    [SerializeField] private float movementSpeed = 0.1f;
     private AudioSource source;
 
     [Header("Audio config")]
-    public AudioClip awakenSound;
-    public AudioClip[] randomSounds;
+    [SerializeField] private AudioClip awakenSound;
+    [SerializeField] private AudioClip[] randomSounds;
 
     private void Awake()
     {
         source = GetComponent<AudioSource>();
         source.PlayOneShot(awakenSound);
-        StartCoroutine(playSound());
+        StartCoroutine(PlaySound());
     }
 
     private void Update()
@@ -23,10 +23,10 @@ public class chasingMonster : MonoBehaviour
         transform.Translate(transform.right * movementSpeed * Time.deltaTime);
     }
 
-    private IEnumerator playSound()
+    private IEnumerator PlaySound()
     {
         yield return new WaitForSeconds(Random.Range(3, 10));
         source.PlayOneShot(randomSounds[Random.Range(0, randomSounds.Length)]);
-        StartCoroutine(playSound());
+        StartCoroutine(PlaySound());
     }
 }

@@ -7,7 +7,7 @@ public class Pistol : MonoBehaviour
     [Header("Pistol objects")]
     [SerializeField] private GameObject barrel;
     [SerializeField] private GameObject bullet;
-    public GameObject gunDrop;
+    [SerializeField] private GameObject gunDrop;
     [SerializeField] private AudioClip fireSound;
     [SerializeField] private AudioClip noAmmoSound;
 
@@ -27,6 +27,11 @@ public class Pistol : MonoBehaviour
     {
         currentAmmo = ammoPerClip;
         fireRateSave = fireRate;
+    }
+
+    public GameObject GetGunDrop()
+    {
+        return gunDrop;
     }
 
     private void Update()
@@ -56,12 +61,12 @@ public class Pistol : MonoBehaviour
             if (!reloading)
             {
                 reloading = true;
-                StartCoroutine(reload());
+                StartCoroutine(Reload());
             }
         }
     }
 
-    public bool checkIfReloading()
+    public bool CheckIfReloading()
     {
         return reloading;
     }
@@ -69,16 +74,16 @@ public class Pistol : MonoBehaviour
     private void FireBullet()
     {
         if (fireSound)
-            MusicMGR.playAudioClip(fireSound, 0, 0, 0, false);
+            MusicMGR.PlayAudioClip(fireSound, 0, 0, 0, false);
         fireRate = fireRateSave;
         currentAmmo -= 1;
         GameObject newBullet = Instantiate(bullet, barrel.transform.position, barrel.transform.rotation);
         newBullet.GetComponent<Rigidbody>().AddForce(newBullet.transform.forward * bulletFireSpeed);
-        newBullet.GetComponent<Bullet>().setStats(damage, destroyBulletOnHit);
+        newBullet.GetComponent<Bullet>().SetStats(damage, destroyBulletOnHit);
         Destroy(newBullet, 3);
     }
 
-    private IEnumerator reload()
+    private IEnumerator Reload()
     {
         yield return new WaitForSeconds(reloadTime);
         currentAmmo = ammoPerClip;

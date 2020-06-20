@@ -11,12 +11,13 @@ public class SceneMGR : MonoBehaviour
         SceneManager.LoadScene(index);
     }
 
-    public void loadStartScene(int index)
+    public void LoadStartScene(int index)
     {
-        StartCoroutine(loadFirstScene(index));
+        StartCoroutine(LoadFirstScene(index));
+        ES3.Save<int>("weaponIndex", 1);
     }
 
-    private IEnumerator loadFirstScene(int index)
+    private IEnumerator LoadFirstScene(int index)
     {
         yield return new WaitForSeconds(3);
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(index);
@@ -26,7 +27,7 @@ public class SceneMGR : MonoBehaviour
         }
     }
 
-    public static void resetScene()
+    public static void ResetScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

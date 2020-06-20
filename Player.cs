@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
     {
         renderer = GetComponent<MeshRenderer>();
         idleMaterial = renderer.material;
-        MusicMGR.findFilter();
+        MusicMGR.FindFilter();
         rb = GetComponent<Rigidbody>();
         layer_mask = LayerMask.GetMask("Ground", "Enemy");
         if (ES3.KeyExists("weaponIndex"))
@@ -60,60 +60,60 @@ public class Player : MonoBehaviour
         transform.Translate(inputMovement * Time.deltaTime * speed, Space.World);
 
         if (!inSafeArea)
-            takeDamage(0.1f);
+            TakeDamage(0.1f);
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            jump();
+            Jump();
         }
                 
     }
 
-    public void jump()
+    public void Jump()
     {
-        if (checkIfGrounded())
+        if (CheckIfGrounded())
         {
             rb.AddForce(Vector3.up * jumpForce);
         }
     }
 
-    public bool checkIfReloadingGun()
+    public bool CheckIfReloadingGun()
     {
-        return activeWeapon.GetComponent<Pistol>().checkIfReloading();
+        return activeWeapon.GetComponent<Pistol>().CheckIfReloading();
     }
 
-    private bool checkIfGrounded()
+    private bool CheckIfGrounded()
     {
         float DisstanceToTheGround = GetComponent<Collider>().bounds.extents.y;
         return (Physics.Raycast(transform.position, -transform.up, DisstanceToTheGround + 0.1f));
     }
 
-    public void takeDamage(float amount)
+    public void TakeDamage(float amount)
     {
         health -= amount;
 
         if(health <= 0 && !isDead)
         {
-            die();
+            Die();
         }
         else
         {
             renderer.material = hurtMaterial;
-            StartCoroutine(backToIdleMaterial());
+            StartCoroutine(BackToIdleMaterial());
         }
     }
 
-    private IEnumerator backToIdleMaterial()
+    private IEnumerator BackToIdleMaterial()
     {
         yield return new WaitForSeconds(0.25f);
         renderer.material = idleMaterial;
     }
 
-    private void die()
+    private void Die()
     {
         isDead = true;
-        ES3.DeleteFile();
-        SceneMGR.resetScene();
+        ES3.Save<int>("weaponIndex", 1);
+        SceneMGR.ResetScene();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -131,7 +131,7 @@ public class Player : MonoBehaviour
         inSafeArea = false;
 
         if (other.tag == "Death" && !isDead)
-            die();
+            Die();
 
         if (other.tag == "Lever")
         {
@@ -146,7 +146,7 @@ public class Player : MonoBehaviour
         if (other.tag == "Trap")
         {
             if (!isDead)
-                transform.position = other.transform.GetComponent<resetToWaypoint>().getWaypoint().position;
+                transform.position = other.transform.GetComponent<ResetToWaypoint>().GetWaypoint().position;
             inSafeArea = true;
             return;
         }
@@ -165,7 +165,7 @@ public class Player : MonoBehaviour
     public void setWeapon(int weaponIndex, GameObject pickup)
     {
         if(activeWeapon)
-            Instantiate(activeWeapon.GetComponent<Pistol>().gunDrop, transform.position, Quaternion.identity);
+            Instantiate(activeWeapon.GetComponent<Pistol>().GetGunDrop(), transform.position, Quaternion.identity);
         pistol.SetActive(false);
         assaultRifle.SetActive(false);
         sniperRifle.SetActive(false);

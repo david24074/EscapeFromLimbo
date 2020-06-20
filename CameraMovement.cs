@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    public GameObject player;
-    public float lerpSpeed;
+    [SerializeField] private GameObject player;
+    [SerializeField] private float lerpSpeed;
     private Vector3 destinationPos;
-    public Vector3 targetPos;
-    public Transform targetObj;
+    [SerializeField] private Vector3 targetPos;
+    [SerializeField] private Transform targetObj;
 
     private void Update()
     {
@@ -26,7 +26,7 @@ public class CameraMovement : MonoBehaviour
         //(0, 7, -11);
     }
 
-    public void setNewCameraPos(Transform newPos)
+    public void SetNewCameraPos(Transform newPos)
     {
         if (newPos)
         {

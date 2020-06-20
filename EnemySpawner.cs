@@ -20,7 +20,7 @@ public class EnemySpawner : MonoBehaviour
         transform.position = player.transform.position + distToPlayer;
     }
 
-    public void spawnEnemies(int amount, GameObject newEnemy)
+    public void SpawnEnemies(int amount, GameObject newEnemy)
     {
         enemy = newEnemy;
         for(int i = 0; i < amount; i++)
@@ -29,7 +29,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    public void spawnSingleEnemy(GameObject newEnemy)
+    public void SpawnSingleEnemy(GameObject newEnemy)
     {
         enemy = newEnemy;
         Instantiate(enemy, new Vector3(Random.Range(transform.position.x, transform.position.x + maxSize), transform.position.y, Random.Range(transform.position.z, transform.position.z - 60)), Quaternion.identity);

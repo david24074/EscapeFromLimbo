@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,17 +21,17 @@ public class Bossfight : MonoBehaviour
         anim = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         playerTransform = player.transform;
-        maxHealth = healthCheck.health;
+        maxHealth = healthCheck.GetHealth();
         StartCoroutine(startFight());
     }
 
     private IEnumerator startFight()
     {
         yield return new WaitForSeconds(3.5f);
-        nextAbility();
+        NextAbility();
     }
 
-    private void nextAbility()
+    private void NextAbility()
     {
         if (checkIfAlive)
         {
@@ -54,7 +53,7 @@ public class Bossfight : MonoBehaviour
                 anim.Play(ability.animationNameToPlay);
             }
 
-            StartCoroutine(endAbility(ability));
+            StartCoroutine(EndAbility(ability));
         }
     }
 
@@ -76,17 +75,17 @@ public class Bossfight : MonoBehaviour
         }
         else
         {
-            healthSlider.value = healthCheck.health / maxHealth * 100;
+            healthSlider.value = healthCheck.GetHealth() / maxHealth * 100;
         }
     }
 
-    public void explodeGround()
+    public void ExplodeGround()
     {
         explosion.gameObject.SetActive(true);
-        player.jump();
+        player.Jump();
     }
 
-    private IEnumerator endAbility(BossAbility ability)
+    private IEnumerator EndAbility(BossAbility ability)
     {
         yield return new WaitForSeconds(ability.abilityDuration);
         if (ability.objectsToActivate.Length > 0)
@@ -97,6 +96,6 @@ public class Bossfight : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(ability.DurationUntilEnd);
-        nextAbility();
+        NextAbility();
     }
 }

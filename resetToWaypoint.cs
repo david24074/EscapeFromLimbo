@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class resetToWaypoint : MonoBehaviour
+public class ResetToWaypoint : MonoBehaviour
 {
     [SerializeField] private Transform waypoint;
 
-    public Transform getWaypoint()
+    public Transform GetWaypoint()
     {
         return waypoint;
     }

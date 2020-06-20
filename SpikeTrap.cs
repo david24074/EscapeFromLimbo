@@ -10,10 +10,10 @@ public class SpikeTrap : MonoBehaviour
     private void Start()
     {
         col = GetComponent<Collider>();
-        StartCoroutine(enableObject());
+        StartCoroutine(EnableObject());
     }
 
-    private IEnumerator enableObject()
+    private IEnumerator EnableObject()
     {
         yield return new WaitForSeconds(Random.Range(1, 3));
         col.enabled = true;
@@ -21,6 +21,6 @@ public class SpikeTrap : MonoBehaviour
         yield return new WaitForSeconds(1);
         col.enabled = false;
         spikes.SetActive(false);
-        StartCoroutine(enableObject());
+        StartCoroutine(EnableObject());
     }
 }

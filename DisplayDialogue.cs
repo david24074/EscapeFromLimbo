@@ -17,14 +17,14 @@ public class DisplayDialogue : MonoBehaviour
         dialogueText = GetComponent<TextMeshProUGUI>();
     }
 
-    public static void activateText(string t, float timer)
+    public static void ActivateText(string t, float timer)
     {
         dialogueText.text = t;
         dialogueBox.enabled = true;
-        dialogue.StartCoroutine(stopText(timer));
+        dialogue.StartCoroutine(StopText(timer));
     }
 
-    public static IEnumerator stopText(float timer)
+    public static IEnumerator StopText(float timer)
     {
         yield return new WaitForSeconds(timer);
         if (dialogueText)
